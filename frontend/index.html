@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GigShield — Parametric Income Protection for Delivery Workers</title>
+    <meta name="description" content="Weekly income protection for India's food delivery workers. Auto payouts on disruptions like heavy rain, floods, extreme heat, and zone closures." />
+    <meta name="keywords" content="gig economy, delivery workers, income protection, insurance, parametric insurance, India" />
+    <meta name="author" content="GigShield Team" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GigShield — Parametric Income Protection" />
+    <meta property="og:description" content="Weekly income protection for India's food delivery workers with auto payouts on disruptions." />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="GigShield — Parametric Income Protection" />
+    <meta property="twitter:description" content="Weekly income protection for India's food delivery workers with auto payouts on disruptions." />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
+    
+    <!-- Custom CSS for animations -->
+    <style>
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out;
+      }
+      
+      * {
+        scroll-behavior: smooth;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #0f172a;
+          color: #f1f5f9;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

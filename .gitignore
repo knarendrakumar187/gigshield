@@ -1,0 +1,68 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production builds
+/frontend/dist/
+/frontend/build/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Django
+/backend/*.log
+/backend/local_settings.py
+/backend/db.sqlite3
+/backend/.venv/
+/backend/venv/
+/backend/__pycache__/
+/backend/*/__pycache__/
+/backend/*/*/__pycache__/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (keep structure, ignore large datasets)
+/data/*.csv
+/data/*.json
+/data/*.xlsx
+
+# Logs
+logs/
+*.log
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Docker
+.dockerignore
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
