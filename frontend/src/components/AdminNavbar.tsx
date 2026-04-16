@@ -1,7 +1,6 @@
 import React from 'react'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Button } from './ui/Button'
 
 export function AdminNavbar({
   title,
@@ -14,7 +13,6 @@ export function AdminNavbar({
 }) {
   const { logout } = useAuth()
   const nav = useNavigate()
-  const location = useLocation()
 
   return (
     <header className="flex flex-col md:flex-row justify-between items-start md:items-center bg-[var(--color-bg-elevated)] border border-[var(--color-border)] p-4 rounded-[20px] mb-6 shadow-lg gap-4">

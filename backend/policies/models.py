@@ -27,6 +27,7 @@ class WeeklyPolicy(models.Model):
     expected_loss_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     zone_risk_multiplier = models.FloatField(null=True, blank=True)
     premium_breakdown = models.JSONField(default=dict, blank=True)
+    covered_triggers = models.JSONField(default=list, blank=True)
 
     class Meta:
         ordering = ["-week_start"]

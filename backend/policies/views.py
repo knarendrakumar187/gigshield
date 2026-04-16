@@ -162,6 +162,7 @@ class PurchaseView(APIView):
                     expected_loss_amount=Decimal(str(breakdown.get("expected_loss_estimate") or 0)),
                     zone_risk_multiplier=breakdown.get("combined_multiplier"),
                     premium_breakdown=breakdown,
+                    covered_triggers=ser.validated_data.get("covered_triggers") or [],
                 )
                 ExclusionAcknowledgment.objects.create(
                     worker=request.user,
@@ -303,9 +304,10 @@ class PolicyCertificatePDFView(APIView):
         ], cur_y)
 
         cur_y = draw_section("Coverage Terms", cur_y)
+        triggers_str = "All Events" if "ALL" in policy.covered_triggers or not policy.covered_triggers else ", ".join(policy.covered_triggers)
         cur_y = draw_rows([
-            ("Cover Type", "Parametric Rainfall / Disruption"),
-            ("Trigger Condition", "Rainfall > 50mm OR Official Disruption Alert"),
+            ("Cover Type", f"Parametric Insurance ({triggers_str})"),
+            ("Trigger Condition", "Event severity exceeds thresholds"),
             ("Pay-out Basis", "Daily earnings for duration of disruption"),
             ("Exclusions Version", policy.exclusions_version),
             ("Issued On", str(timezone.now().date())),

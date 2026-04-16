@@ -25,6 +25,14 @@ SEVERITY_SCALE = {
 
 
 def calculate_payout(worker, trigger, policy) -> dict[str, Any]:
+    if policy.covered_triggers and trigger.trigger_type not in policy.covered_triggers and "ALL" not in policy.covered_triggers:
+        return {
+            "amount": Decimal("0"),
+            "excluded": True,
+            "reason": f"Event {trigger.trigger_type} not selected in policy coverage",
+            "exclusion_id": "EX-00",
+            "calculation": {},
+        }
     engine = ExclusionEngine()
     exclusion = engine.check_claim(None, trigger, policy)
     if exclusion["is_excluded"]:

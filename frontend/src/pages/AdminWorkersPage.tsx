@@ -2,8 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import client from '../api/client'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
 import { AdminNavbar } from '../components/AdminNavbar'
 
 type Worker = {
@@ -58,8 +56,6 @@ function BehaviorStats({ workerId }: { workerId: number }) {
 }
 
 export default function AdminWorkersPage() {
-  const { logout } = useAuth()
-  const nav = useNavigate()
   const [workers, setWorkers] = useState<Worker[]>([])
   const [loading, setLoading] = useState(true)
 

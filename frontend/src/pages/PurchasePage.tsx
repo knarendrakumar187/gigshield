@@ -28,6 +28,34 @@ export default function PurchasePage() {
   const [upi, setUpi] = useState(user?.upi_id || '')
   const [busy, setBusy] = useState(false)
   const [payErr, setPayErr] = useState('')
+  const [selectedTriggers, setSelectedTriggers] = useState<string[]>(['ALL'])
+
+  const AVAILABLE_TRIGGERS = [
+    { id: 'RAIN', label: 'Heavy Rainfall', icon: '🌧️', desc: 'Severe waterlogging' },
+    { id: 'HEAT', label: 'Heatwave', icon: '🌡️', desc: 'Temperatures above 45°C' },
+    { id: 'AQI', label: 'Severe Smog', icon: '😷', desc: 'Hazardous air quality' },
+    { id: 'FLOOD', label: 'Flash Flood', icon: '🌊', desc: 'Urban flooding limits' },
+    { id: 'ZONE_CLOSURE', label: 'Zone Closure', icon: '🚧', desc: 'Delivery zones shut' },
+    { id: 'CURFEW', label: 'City Curfew', icon: '🚨', desc: 'Emergency lockdowns' },
+  ]
+
+  const toggleTrigger = (id: string) => {
+    let newTriggers = [...selectedTriggers]
+    if (newTriggers.includes('ALL')) {
+      newTriggers = AVAILABLE_TRIGGERS.map(t => t.id).filter(t => t !== id)
+    } else {
+      if (newTriggers.includes(id)) {
+        newTriggers = newTriggers.filter(t => t !== id)
+      } else {
+        newTriggers.push(id)
+      }
+      if (newTriggers.length === AVAILABLE_TRIGGERS.length) {
+        newTriggers = ['ALL']
+      }
+    }
+    if (newTriggers.length === 0) newTriggers = ['RAIN']
+    setSelectedTriggers(newTriggers)
+  }
 
   useEffect(() => {
     if (user?.upi_id) setUpi(user.upi_id)
@@ -38,7 +66,7 @@ export default function PurchasePage() {
   }, [])
 
   useEffect(() => {
-    if (step >= 1)
+    if (step >= 2)
       client.get('/api/policies/preview/', { params: { tier } }).then((r) => setBreakdown(r.data))
   }, [tier, step])
 
@@ -53,10 +81,11 @@ export default function PurchasePage() {
         ip_address: '127.0.0.1',
         device_fingerprint: 'demo',
         upi_id: upi.trim(),
+        covered_triggers: selectedTriggers,
       })
       await refreshProfile()
       confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } })
-      setStep(4)
+      setStep(5)
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const d = e.response?.data as { error?: string; detail?: string }
@@ -72,9 +101,9 @@ export default function PurchasePage() {
 
   return (
     <div className="worker-layout min-h-screen pt-4 space-y-4">
-      <div className="flex gap-2 text-label text-[10px] uppercase text-[var(--color-text-muted)]">
-        {['Plan', 'Exclusions', 'Pay'].map((s, i) => (
-          <span key={s} className={step >= i ? 'text-[var(--color-accent)]' : ''}>
+      <div className="flex gap-1 text-[9px] sm:text-[10px] uppercase text-[var(--color-text-muted)] flex-wrap">
+        {['Plan', 'Events', 'Details', 'Terms', 'Pay'].map((s, i) => (
+          <span key={s} className={step >= i ? 'text-[var(--color-accent)] font-bold' : ''}>
             {i + 1}:{s}
           </span>
         ))}
@@ -143,32 +172,69 @@ export default function PurchasePage() {
             })}
           </div>
           <Button className="w-full" onClick={() => setStep(1)}>
-            Continue
+            Continue to Coverage Triggers
           </Button>
         </div>
       )}
 
       {step === 1 && (
+        <div className="space-y-4">
+          <div className="mb-2">
+            <h2 className="text-xl font-display font-bold text-white tracking-tight">Select Coverage</h2>
+            <p className="text-sm text-gray-400">Choose the disruption events you want to be insured against.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {AVAILABLE_TRIGGERS.map((t) => {
+              const checked = selectedTriggers.includes('ALL') || selectedTriggers.includes(t.id)
+              return (
+                <div 
+                  key={t.id} 
+                  onClick={() => toggleTrigger(t.id)}
+                  className={`cursor-pointer rounded-2xl p-4 border transition-all duration-200 select-none ${
+                    checked 
+                      ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 shadow-[0_0_15px_rgba(0,212,170,0.15)]' 
+                      : 'border-white/10 bg-white/5 hover:border-white/20'
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-2xl">{t.icon}</span>
+                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${checked ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-black' : 'border-gray-500'}`}>
+                      {checked && <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>}
+                    </div>
+                  </div>
+                  <p className={`font-bold mb-1 ${checked ? 'text-white' : 'text-gray-300'}`}>{t.label}</p>
+                  <p className="text-xs text-gray-400 leading-tight">{t.desc}</p>
+                </div>
+              )
+            })}
+          </div>
+          <Button className="w-full mt-2" onClick={() => setStep(2)}>
+            Continue
+          </Button>
+        </div>
+      )}
+
+      {step === 2 && (
         <>
           <PremiumBreakdown breakdown={breakdown} />
-          <Button className="w-full" onClick={() => setStep(2)}>
+          <Button className="w-full" onClick={() => setStep(3)}>
             Continue to exclusions
           </Button>
         </>
       )}
 
-      {step === 2 && exclusions && (
+      {step === 3 && exclusions && (
         <div className="flex flex-col h-[calc(100vh-140px)]">
           <div className="flex-1 min-h-0 mb-4">
             <ExclusionsPanel exclusions={exclusions.exclusions} checked={exAck} onChecked={setExAck} />
           </div>
-          <Button className="w-full shrink-0" disabled={!exAck} onClick={() => setStep(3)}>
+          <Button className="w-full shrink-0" disabled={!exAck} onClick={() => setStep(4)}>
             Continue to payment
           </Button>
         </div>
       )}
 
-      {step === 3 && (
+      {step === 4 && (
         <Card className="border-blue-900/40 relative overflow-hidden">
           <div className="absolute top-0 right-0 bg-blue-600 text-white text-[9px] font-bold px-3 py-1 rounded-bl-xl tracking-wider z-10 shadow-lg">
             TEST MODE
@@ -199,7 +265,7 @@ export default function PurchasePage() {
         </Card>
       )}
 
-      {step === 4 && (
+      {step === 5 && (
         <Card variant="success">
           <p className="text-h3 font-display text-emerald-400">You are covered</p>
           <p className="text-body-sm mt-2">Policy saved. Receipt available from claims once a payout occurs.</p>

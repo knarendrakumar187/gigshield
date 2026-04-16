@@ -18,6 +18,9 @@ class PurchaseSerializer(serializers.Serializer):
     ip_address = serializers.IPAddressField(required=False, allow_null=True)
     device_fingerprint = serializers.CharField(required=False, allow_blank=True, default="")
     upi_id = serializers.CharField(required=False, allow_blank=True, max_length=50, default="")
+    covered_triggers = serializers.ListField(
+        child=serializers.CharField(), required=False, default=list
+    )
 
 
 class ExclusionAckSerializer(serializers.ModelSerializer):
