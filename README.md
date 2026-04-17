@@ -21,7 +21,7 @@
 
 ## 🌐 Live Application
 
-🚀 **[Open Live App →](http://98.130.55.67/login)**
+🚀 **`http://98.130.55.67/login`** *(copy & paste into browser)*
 
 | Role | Username | Password |
 |------|----------|----------|
@@ -165,7 +165,7 @@ Frontend dev server: **http://localhost:5173**
 
 ### 🔑 Demo Credentials
 
-> Try the **[Live App](http://98.130.55.67/login)** directly — no local setup needed.
+> Try the Live App directly — no local setup needed: **`http://98.130.55.67/login`**
 
 | Role | Username | Password |
 |------|----------|----------|
@@ -199,7 +199,7 @@ Frontend dev server: **http://localhost:5173**
 - Instant simulated UPI/wallet payout within 30 seconds of trigger
 - Full actuarial dashboard: Loss Ratio, Expense Ratio, Combined Ratio, System Exposure
 - **Demo Video:** [Watch →](https://youtu.be/jeTXw669mik?si=cgtjXExHDPbCGYfQ)
-- **Live App:** [Open →](http://98.130.55.67/login)
+- **Live App:** `http://98.130.55.67/login`
 - **Pitch Deck:** [View →](https://docs.google.com/presentation/d/1ffPy3qwtQ2d8jUArtEXgG6C0lk3jz8AM/edit?usp=sharing&ouid=106998327190821439217&rtpof=true&sd=true)
 
 ---
