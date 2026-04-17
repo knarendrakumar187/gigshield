@@ -53,11 +53,8 @@ def _run_auto_purchase_demo(policy, worker_profile):
             radius_km=0.0,
         )
 
-    # Use apply() in debug, delay() in production
-    if settings.DEBUG:
-        process_trigger_claims.apply(args=(trigger.id,))
-    else:
-        process_trigger_claims.delay(trigger.id)
+    # Use apply() even in production for the demo so it is INSTANT
+    process_trigger_claims.apply(args=(trigger.id,))
 
 
 
