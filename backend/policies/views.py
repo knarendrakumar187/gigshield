@@ -15,46 +15,50 @@ from workers.models import WorkerProfile
 
 
 def _run_auto_purchase_demo(policy, worker_profile):
-    """
-    After a worker buys a weekly policy, create one targeted parametric trigger
-    so the user immediately sees the automatic claim flow without admin action.
-    Works in both DEBUG and production mode.
-    """
-    from django.conf import settings
+    from decimal import Decimal
     from claims.models import Claim
     from triggers.models import DisruptionTrigger
-    from triggers.tasks import process_trigger_claims
+    from payouts.models import Payout
+    from payouts.services import process_payout_task
+    import uuid
 
-    if Claim.objects.filter(policy=policy).exists():
-        return
-
-    recent = DisruptionTrigger.objects.filter(
-        source="AUTO_PURCHASE_DEMO",
+    # 1. Create a fresh trigger for this purchase
+    trigger = DisruptionTrigger.objects.create(
+        trigger_type="RAIN",
         city=policy.worker.city,
         zone=policy.worker.zone,
-        triggered_at__gte=timezone.now() - timedelta(hours=1)
-    ).first()
+        severity=4,
+        actual_value=120.0,
+        triggered_at=timezone.now(),
+        source="AUTO_PURCHASE_DEMO"
+    )
 
-    if recent:
-        trigger = recent
-    else:
-        trigger = DisruptionTrigger.objects.create(
-            trigger_type="RAIN",
-            city=policy.worker.city,
-            zone=policy.worker.zone,
-            severity=4,
-            threshold_value=50.0,
-            actual_value=100.0,
-            triggered_at=timezone.now(),
-            duration_hours=3.0,
-            source="AUTO_PURCHASE_DEMO",
-            affected_lat=None,
-            affected_lon=None,
-            radius_km=0.0,
-        )
+    # 2. Force create the Claim instantly
+    amount = Decimal("500.00")
+    claim = Claim.objects.create(
+        policy=policy,
+        worker=policy.worker,
+        trigger=trigger,
+        status="APPROVED",
+        claimed_amount=amount,
+        approved_amount=amount,
+        auto_processed=True,
+        processed_at=timezone.now()
+    )
 
-    # Use apply() even in production for the demo so it is INSTANT
-    process_trigger_claims.apply(args=(trigger.id,))
+    # 3. Create the Payout record instantly
+    upi_id = (policy.worker.upi_id or "demo@upi").strip()
+    payout = Payout.objects.create(
+        claim=claim,
+        amount=amount,
+        method=Payout.Method.WALLET,
+        upi_id=upi_id,
+        transaction_ref=f"DEMO_{uuid.uuid4().hex[:8]}",
+        status=Payout.Status.INITIATED
+    )
+
+    # 4. Trigger the background processing (PDF/Receipt)
+    process_payout_task.delay(claim.id)
 
 
 
