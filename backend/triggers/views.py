@@ -46,6 +46,44 @@ class TriggerSimulateView(APIView):
         return Response(DisruptionTriggerSerializer(tr).data, status=status.HTTP_201_CREATED)
 
 
+class WorkerSimulateTriggerView(APIView):
+    """Allows any authenticated worker to fire a demo trigger for their city/zone."""
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        worker = request.user
+        city = worker.city or "Mumbai"
+        zone = worker.zone or "Andheri West"
+        trigger_type = request.data.get("trigger_type", "RAIN")
+
+        # Values high enough to trip the threshold
+        TRIGGER_VALUES = {
+            "RAIN":  {"actual": 120.0, "threshold": 50.0},
+            "HEAT":  {"actual": 46.0,  "threshold": 42.0},
+            "AQI":   {"actual": 400.0, "threshold": 350.0},
+            "FLOOD": {"actual": 80.0,  "threshold": 50.0},
+        }
+        vals = TRIGGER_VALUES.get(trigger_type, TRIGGER_VALUES["RAIN"])
+
+        tr = DisruptionTrigger.objects.create(
+            trigger_type=trigger_type,
+            city=city,
+            zone=zone,
+            severity=3,
+            threshold_value=vals["threshold"],
+            actual_value=vals["actual"],
+            triggered_at=timezone.now(),
+            duration_hours=4,
+            source="worker_demo",
+            is_active=True,
+        )
+        process_trigger_claims.delay(tr.id)
+        return Response(
+            {"triggered": True, "trigger_id": tr.id, "city": city, "zone": zone, "type": trigger_type},
+            status=status.HTTP_201_CREATED,
+        )
+
+
 class TriggerLiveView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 

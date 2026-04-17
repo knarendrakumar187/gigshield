@@ -1,6 +1,6 @@
 from django.urls import path
 
-from triggers.views import TriggerHistoryView, TriggerListView, TriggerLiveView, TriggerPollView, TriggerSimulateView
+from triggers.views import TriggerHistoryView, TriggerListView, TriggerLiveView, TriggerPollView, TriggerSimulateView, WorkerSimulateTriggerView
 
 urlpatterns = [
     path("", TriggerListView.as_view()),
@@ -9,4 +9,5 @@ urlpatterns = [
     path("live/", TriggerLiveView.as_view()),
     path("history/", TriggerHistoryView.as_view()),
     path("poll/", TriggerPollView.as_view()),
+    path("worker-simulate/", WorkerSimulateTriggerView.as_view()),
 ]

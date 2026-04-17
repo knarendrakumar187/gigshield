@@ -324,9 +324,9 @@ export default function LoginPage() {
               )}
 
               {/* Platform and Earnings */}
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2">
                 <select
-                  className="flex-1 rounded-xl bg-[var(--color-bg-elevated)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text-primary)]"
+                  className="w-full rounded-xl bg-[var(--color-bg-elevated)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text-primary)]"
                   value={platform}
                   onChange={(e) => setPlatform(e.target.value)}
                 >
@@ -335,8 +335,10 @@ export default function LoginPage() {
                   ))}
                 </select>
                 <input
-                  className="flex-1 rounded-xl bg-[var(--color-bg-elevated)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text-primary)]"
-                  placeholder="Avg daily earnings (₹)"
+                  className="w-full rounded-xl bg-[var(--color-bg-elevated)] border border-[var(--color-border)] px-4 py-3 text-[var(--color-text-primary)]"
+                  placeholder="Daily earnings (₹)"
+                  type="number"
+                  min="0"
                   value={earnings}
                   onChange={(e) => setEarnings(e.target.value)}
                   autoComplete="off"
