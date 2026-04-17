@@ -158,7 +158,7 @@ class PurchaseView(APIView):
                     expected_loss_amount=Decimal(str(breakdown.get("expected_loss_estimate") or 0)),
                     zone_risk_multiplier=breakdown.get("combined_multiplier"),
                     premium_breakdown=breakdown,
-                    covered_triggers=ser.validated_data.get("covered_triggers") or [],
+                    covered_triggers=ser.validated_data.get("covered_triggers") or ["RAIN", "HEAT"],
                 )
                 ExclusionAcknowledgment.objects.create(
                     worker=request.user,
