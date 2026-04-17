@@ -1,59 +1,52 @@
-# 🛡️ GigShield — Guidewire DEVTrails 2026
+# 🛡️ GigShield
 
-**AI-Powered Parametric Insurance for India’s Gig Economy**
+> **AI-Powered Parametric Insurance for India's Gig Economy**
+> *Built for Guidewire DEVTrails 2026*
 
 ![GigShield Tech Stack](https://img.shields.io/badge/Tech_Stack-React_|_Django_|_Celery_|_Redis_|_PostgreSQL-blue?style=for-the-badge)
-
-## 🚧 The Problem We're Solving
-India’s platform-based delivery partners (Zomato, Swiggy, Zepto, Blinkit, Amazon) are the backbone of the digital economy. However, unpredictable external disruptions—such as **extreme heatwaves, flooding, severe pollution, or unplanned local curfews**—cause immediate interruptions to their work. 
-
-When deliveries are halted, gig workers can lose 20–30% of their weekly earnings. Currently, there is absolutely **zero financial safety net** for temporary, disruption-based loss of income.
-
-## 🚀 The GigShield Solution
-GigShield is an AI-enabled **parametric micro-insurance platform** built strictly to safeguard gig workers against **Loss of Income**. 
-Our solution utilizes real-time API triggers (weather, environmental, municipal alerts) to continuously monitor the risk environment. When an uncontrollable disruption occurs, GigShield automatically initiates a claim and processes instant payouts so the worker's livelihood is protected without waiting for manual loss adjusters.
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Phase](https://img.shields.io/badge/Phase-3%20Final%20Submission-orange?style=for-the-badge)
 
 ---
 
-## ⚖️ The Golden Rules (Strictly Adhered)
-1. **Persona Focus:** We have optimized our platform specifically for **Food & Q-Commerce Delivery Partners** (Zomato, Swiggy, BigBasket, Zepto, Blinkit).
-2. **Coverage Scope:** Our coverage guarantees **Loss of Income ONLY.** We have heavily coded out strict algorithmic exclusions forbidding claims for health issues, vehicle repairs, or accidents.
-3. **Weekly Pricing Model:** Gig workers operate on a week-to-week cashflow basis. All policy premiums, underwriting, and payouts are dynamically calculated using an AI-fueled **Weekly Pricing Matrix**.
+## 🎯 Pitch Deck
+
+📊 **[View GigShield Pitch Deck →](https://docs.google.com/presentation/d/1ffPy3qwtQ2d8jUArtEXgG6C0lk3jz8AM/edit?usp=sharing&ouid=106998327190821439217&rtpof=true&sd=true)**
 
 ---
 
-## 📌 Phase Submissions Roadmap
+## 🎬 Demo Video
 
-### 🏁 Phase 1: Ideation & Foundation 
-*Theme: "Ideate & Know Your Delivery Worker"*
-- **Target Persona Profiling:** Mapped the behavioral workflow of hyper-local delivery riders.
-- **Parametric Triggers Defined:** Heatwaves, severe rain, AQI hazards, and localized curfews.
-- **Workflow Architecture:** Set up the Web platform designed specifically for mobile-first consumption but managed via a desktop Admin UI.
-- **AI Strategy Outline:** Formulated plans for dynamic premium calculation based on risk topologies and an ML-based Isolation Forest algorithm for Fraud Detection.
-- **Video Pitch:** *(Insert Phase 1 Video Link Here)*
+📽️ **[Watch the Full Demo →](https://youtu.be/jeTXw669mik?si=cgtjXExHDPbCGYfQ)**
 
-### ⚙️ Phase 2: Automation & Protection
-*Theme: "Protect Your Worker"*
-- **Optimized UI Registration:** Fully bespoke dashboard onboarding targeting delivery partners.
-- **Dynamic Weekly Premium Calculation:** AI-assisted underwriting that calculates hyper-local zone risk, producing custom ₹/week premium prices.
-- **Insurance Policy Management:** Programmatic issuance of legally sound policy documents strictly enforcing loss-of-income limits.
-- **Claims Management & Automation:** The `TriggerSimulator` interacts with backend Celery queues to simulate disruption events (e.g., Heavy Rain in Mumbai) and autonomously triggers loss-of-income claims across all active riders in the affected zone.
-- **Video Demo:** *(Insert Phase 2 Video Link Here)*
+## 🌐 Live Application
 
-### 🚀 Phase 3: Scale & Optimise
-*Theme: "Perfect for Your Worker"*
-- **Advanced Hybrid Fraud Detection:** Developed an extensive Scikit-Learn `IsolationForest` ML engine layered with programmatic heuristics (validating IP mismatch, temporal abuse, and excessive historical claims) to automatically route claims into `AUTO-APPROVE` or `MANUAL-REVIEW`.
-- **Instant Payout System (Simulated):** Mock integrations processing digital wallet/UPI transactions instantly for automated parametric claims.
-- **Intelligent Dashboards:**
-  - *Worker View:* Tracks active weekly coverage and wallet payouts.
-  - *Admin Underwriting View:* Tracks Loss Ratios, Weekly Expense Ratios, System Exposure, and simulated disruptions (Trigger Simulators).
-- **Final Submissions:**
-  - **Demo Video:** *(Insert Phase 3 Final Video Link Here)*
-  - **Final Pitch Deck:** `GigShield_Pitch_Deck.pdf` uploaded to the root repository.
+🚀 **[Open Live App →](http://98.130.55.67/login)**
+
+| Role | Username | Password |
+|------|----------|----------|
+| Gig Worker (Rider) | `rider` | `rider123` |
+| Admin / Underwriter | `admin` | `admin123` |
 
 ---
 
-## 🛠️ Architecture & Tech Stack
+
+## 🚧 The Problem
+
+India's 15M+ gig delivery partners have **zero financial safety net** for temporary income disruption caused by uncontrollable external events. When a city-wide heatwave or flood halts deliveries for a day, these workers suffer immediate and uncompensated income loss.
+
+## 🚀 The Solution
+
+GigShield is an **AI-enabled parametric micro-insurance platform** that:
+- ✅ Monitors real-time environmental triggers 24/7
+- ✅ Automatically files and approves claims with zero paperwork
+- ✅ Disburses instant digital payouts within 30 seconds of a trigger
+- ✅ Detects and flags fraudulent claims before they are paid
+- ✅ Provides actuarial-grade financial monitoring for underwriters
+
+---
+
+## 🛠️ Architecture
 
 ```mermaid
 flowchart LR
@@ -67,51 +60,156 @@ flowchart LR
     PE[Policy Engine]
     PT[Parametric Triggers]
     FE[AI Fraud Engine]
+    PY[Payout Processor]
   end
   subgraph Async [Background Services]
     CW[Celery Workers]
     CB[Celery Beat]
-    RD[Redis Cache]
+    RD[(Redis Broker)]
     DB[(PostgreSQL)]
   end
-  
+
   Client -->|REST API| Core
   Core --> Async
+  Async -->|Wallet Credit| Client
 ```
-
-- **Frontend**: React 19, Vite, Tailwind CSS, Recharts (Actuarial Analytics)
-- **Backend**: Django 5.2, Django REST Framework
-- **Databases**: PostgreSQL (Main Data), Redis (Message Broker)
-- **Background Tasks**: Celery & Celery Beat
-- **AI/ML & Data**: Python `scikit-learn`, `numpy`, `pandas`
-- **Deployment**: Docker, Gunicorn, Nginx
 
 ---
 
-## ⚡ Quick Start: 100% Free Production Deployment
+## 🔨 Built With
 
-We've specifically structured the repository so you can deploy the 5-engine stack completely for free. 
+React 19, Vite, TypeScript, Tailwind CSS, Recharts, Django 5.2, Django REST Framework, PostgreSQL, Redis, Celery, Celery Beat, scikit-learn, NumPy, pandas, GeoPandas, Docker, Gunicorn, Nginx, OpenWeather API
 
-**Locally (Using Docker):**
+---
+
+## ⚡ Running Locally
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (v24+) installed and running
+- Git
+
+### 1. Clone the Repository
+
 ```bash
-git clone https://github.com/your-repo/gigshield.git
+git clone https://github.com/knarendrakumar187/gigshield.git
 cd gigshield
+```
+
+### 2. Configure Environment Variables
+
+Copy the example environment file and fill in your values:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+Key variables in `backend/.env`:
+
+```env
+SECRET_KEY=your-django-secret-key
+DEBUG=False
+DATABASE_URL=postgresql://gigshield:gigshield@db:5432/gigshield
+REDIS_URL=redis://redis:6379/0
+OPENWEATHER_API_KEY=your-openweather-api-key   # optional for live triggers
+```
+
+### 3. Start the Full Stack (Docker — Recommended)
+
+```bash
+# Production-like stack (Django + Celery + Beat + Redis + PostgreSQL + Nginx)
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
-**Free Cloud Deployment (Render + Supabase + Upstash):**
-A specialized `backend/start.sh` script is included to run Django, Celery, and Celery Beat on a single free instance tier to bypass server costs.
-1. Connect DB to Supabase (Postgres).
-2. Connect Cache to Upstash (Redis).
-3. Connect Frontend to Vercel.
-4. Deploy the backend to Render, running `bash start.sh` as the start command.
+The app will be available at **http://localhost**.
+
+### 4. Seed Demo Data
+
+```bash
+docker compose -f docker-compose.prod.yml exec backend python manage.py migrate
+docker compose -f docker-compose.prod.yml exec backend python manage.py seed_demo_data
+docker compose -f docker-compose.prod.yml exec backend python seed_demo_payouts.py
+```
+
+### 5. Running Without Docker (Dev Mode)
+
+**Backend:**
+```bash
+cd backend
+python -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+**Celery Worker (new terminal):**
+```bash
+celery -A gigshield worker --loglevel=info
+```
+
+**Celery Beat (new terminal):**
+```bash
+celery -A gigshield beat --loglevel=info
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend dev server: **http://localhost:5173**
+
+---
 
 ### 🔑 Demo Credentials
 
+> Try the **[Live App](http://98.130.55.67/login)** directly — no local setup needed.
+
 | Role | Username | Password |
-|---|---|---|
-| Gig Worker | `rider` | `rider123` |
+|------|----------|----------|
+| Gig Worker (Rider) | `rider` | `rider123` |
 | Admin / Underwriter | `admin` | `admin123` |
 
 ---
-*Developed for Guidewire DEVTrails 2026*
+
+## 📌 Phase Submissions Roadmap
+
+### 🏁 Phase 1 — Ideation & Foundation
+*"Ideate & Know Your Delivery Worker"*
+- Target persona profiling for hyper-local delivery riders
+- Parametric triggers defined: heatwaves, severe rain, AQI hazards, localized curfews
+- Mobile-first worker portal + desktop admin UI architecture
+- AI strategy: dynamic premium matrix + Isolation Forest fraud detection design
+- **Video:** *(Insert Phase 1 Video Link Here)*
+
+### ⚙️ Phase 2 — Automation & Protection
+*"Protect Your Worker"*
+- Full onboarding flow with KYC and rider profiling
+- Dynamic weekly premium calculation with hyper-local zone risk multipliers
+- Programmatic policy issuance enforcing loss-of-income-only coverage
+- `TriggerSimulator` → Celery fan-out → auto-claim-creation pipeline
+- **Video:** *(Insert Phase 2 Video Link Here)*
+
+### 🚀 Phase 3 — Scale & Optimise *(Final)*
+*"Perfect for Your Worker"*
+- Scikit-learn `IsolationForest` + 5-heuristic hybrid fraud detection
+- Thresholds: Auto-Approve (< 0.30), Manual Review (≥ 0.60)
+- Instant simulated UPI/wallet payout within 30 seconds of trigger
+- Full actuarial dashboard: Loss Ratio, Expense Ratio, Combined Ratio, System Exposure
+- **Demo Video:** [Watch →](https://youtu.be/jeTXw669mik?si=cgtjXExHDPbCGYfQ)
+- **Live App:** [Open →](http://98.130.55.67/login)
+- **Pitch Deck:** [View →](https://docs.google.com/presentation/d/1ffPy3qwtQ2d8jUArtEXgG6C0lk3jz8AM/edit?usp=sharing&ouid=106998327190821439217&rtpof=true&sd=true)
+
+---
+
+## 🔐 The Golden Rules (Strictly Adhered)
+
+1. **Persona Focus**: Optimized exclusively for **Food & Q-Commerce Delivery Partners** (Zomato, Swiggy, BigBasket, Zepto, Blinkit).
+2. **Coverage Scope**: Covers **Loss of Income ONLY**. Strict algorithmic exclusions forbid claims for health issues, vehicle repairs, or accidents.
+3. **Weekly Pricing Model**: All premiums, underwriting, and payouts are dynamically priced using the AI-driven Weekly Pricing Matrix.
+
+---
+
+*Developed for Guidewire DEVTrails 2026 · Team GigShield*
