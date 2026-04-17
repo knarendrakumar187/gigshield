@@ -12,7 +12,7 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 @shared_task
-def update_worker_behavior_profile(worker_id: int):
+def update_worker_behavior_profile(worker_id: int, claim_id: int = None):
     """
     Run after every claim is processed. Updates the worker's behavioral fingerprint.
     Called by process_trigger_claims after each claim status is set.
