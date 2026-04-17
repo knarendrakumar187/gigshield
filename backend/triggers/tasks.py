@@ -321,10 +321,20 @@ def process_trigger_claims(trigger_id: int):
             update_worker_behavior_profile.delay(worker.id, claim.id)
 
         if claim.status == "APPROVED":
-            if settings.DEBUG:
-                process_payout_task.apply(args=(claim.id,))
-            else:
-                process_payout_task.delay(claim.id)
+            from payouts.models import Payout
+            upi_id = (worker.upi_id or "pending@upi").strip()
+            # Create Payout record instantly so dashboard counter updates
+            Payout.objects.get_or_create(
+                claim=claim,
+                defaults={
+                    "amount": claim.approved_amount,
+                    "method": Payout.Method.WALLET,
+                    "upi_id": upi_id,
+                    "transaction_ref": f"PENDING_{uuid.uuid4().hex[:8]}",
+                    "status": Payout.Status.INITIATED,
+                }
+            )
+            process_payout_task.delay(claim.id)
         results.append({"worker": worker.id, "status": claim.status, "amount": str(claim.approved_amount)})
     total = sum(Decimal(str(r["amount"])) for r in results if r["status"] == "APPROVED")
     trigger.affected_workers_count = len(results)

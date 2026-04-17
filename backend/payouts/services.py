@@ -77,8 +77,18 @@ def process_payout_task(claim_id: int):
         return {"ok": True, "existing": claim.payout_ref}
 
     upi_id = (claim.worker.upi_id or "pending@upi").strip()
-    amount_float = float(claim.approved_amount)
+    payout, created = Payout.objects.get_or_create(
+        claim=claim,
+        defaults={
+            "amount": claim.approved_amount,
+            "method": Payout.Method.WALLET,
+            "upi_id": upi_id,
+            "transaction_ref": f"PENDING_{uuid.uuid4().hex[:8]}",
+            "status": Payout.Status.INITIATED,
+        }
+    )
 
+    amount_float = float(claim.approved_amount)
     logger.info(f"====== INITIATING RAZORPAY TEST MODE PAYOUT FOR CLAIM {claim.id} ======")
     
     # 1. Create/Retrieve Contact
@@ -95,14 +105,8 @@ def process_payout_task(claim_id: int):
     status_ok = rzp_response["status"] in ["processed", "processing"]
     reason = rzp_response.get("status_details", {}).get("reason", "Razorpay rejected transaction")
     
-    payout = Payout.objects.create(
-        claim=claim,
-        amount=claim.approved_amount,
-        method=Payout.Method.WALLET,  # RazorpayX uses Razorpay Wallet abstraction
-        upi_id=upi_id,
-        transaction_ref=ref,
-        status=Payout.Status.INITIATED,
-    )
+    payout.transaction_ref = ref
+    payout.save(update_fields=["transaction_ref"])
 
     if not status_ok:
         logger.warning(f"[RazorpayX] Payout {ref} Failed: {reason}")
