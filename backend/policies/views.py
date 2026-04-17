@@ -16,26 +16,17 @@ from workers.models import WorkerProfile
 
 def _run_auto_purchase_demo(policy, worker_profile):
     """
-    Hackathon/demo behavior:
-    after a worker buys a weekly policy, create exactly one targeted parametric trigger
+    After a worker buys a weekly policy, create one targeted parametric trigger
     so the user immediately sees the automatic claim flow without admin action.
+    Works in both DEBUG and production mode.
     """
     from django.conf import settings
-
     from claims.models import Claim
     from triggers.models import DisruptionTrigger
     from triggers.tasks import process_trigger_claims
 
-    if not settings.DEBUG:
-        return
     if Claim.objects.filter(policy=policy).exists():
         return
-
-    affected_lat = getattr(worker_profile, "registered_lat", None)
-    affected_lon = getattr(worker_profile, "registered_lon", None)
-    if getattr(worker_profile, "grid_cell", None):
-        affected_lat = worker_profile.grid_cell.center_lat
-        affected_lon = worker_profile.grid_cell.center_lon
 
     recent = DisruptionTrigger.objects.filter(
         source="AUTO_PURCHASE_DEMO",
@@ -62,7 +53,12 @@ def _run_auto_purchase_demo(policy, worker_profile):
             radius_km=0.0,
         )
 
-    process_trigger_claims.apply(args=(trigger.id,))
+    # Use apply() in debug, delay() in production
+    if settings.DEBUG:
+        process_trigger_claims.apply(args=(trigger.id,))
+    else:
+        process_trigger_claims.delay(trigger.id)
+
 
 
 class PremiumPreviewView(APIView):
