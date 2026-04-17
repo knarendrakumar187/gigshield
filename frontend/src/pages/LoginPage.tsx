@@ -145,7 +145,7 @@ export default function LoginPage() {
     try {
       if (mode === 'login') {
         const role = await login(username, password)
-        nav(role === 'ADMIN' ? '/admin' : '/dashboard', { replace: true })
+        nav(role === 'ADMIN' ? '/admin' : '/how-it-works', { replace: true })
       } else {
         await client.post('/api/auth/register/', {
           username,
@@ -165,7 +165,7 @@ export default function LoginPage() {
           }).catch(() => {})
         }
         const role = await login(username, password)
-        nav(role === 'ADMIN' ? '/admin' : '/dashboard', { replace: true })
+        nav(role === 'ADMIN' ? '/admin' : '/how-it-works', { replace: true })
       }
     } catch (e) {
       if (axios.isAxiosError(e)) {

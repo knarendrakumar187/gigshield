@@ -8,7 +8,7 @@ export type TimelineClaim = {
 }
 
 function getActiveStep(claim: TimelineClaim): number {
-  if (claim.payout?.completed_at) return 4
+  if (claim.payout) return 4
   if (claim.status === "APPROVED") return 3
   if (claim.status === "MANUAL_REVIEW") return 2
   if (claim.status === "REJECTED") return 2

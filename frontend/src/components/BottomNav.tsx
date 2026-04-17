@@ -5,6 +5,7 @@ const items = [
   { to: '/purchase', label: 'Policy', icon: '◆' },
   { to: '/claims', label: 'Claims', icon: '☰' },
   { to: '/profile', label: 'Profile', icon: '○' },
+  { to: '/how-it-works', label: 'Guide', icon: '?' },
 ]
 
 export function BottomNav() {

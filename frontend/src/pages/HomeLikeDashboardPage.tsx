@@ -122,7 +122,7 @@ export default function HomeLikeDashboardPage() {
 
   const payoutsThisMonth = payouts.filter((p) => {
     const t = p.completed_at || p.initiated_at
-    return p.status === 'SUCCESS' && inThisMonth(t)
+    return (p.status === 'SUCCESS' || p.status === 'INITIATED') && inThisMonth(t)
   })
   const payoutsReceivedCount = payoutsThisMonth.length
 

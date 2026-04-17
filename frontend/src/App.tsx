@@ -13,6 +13,7 @@ import AdminActuarialPage from './pages/AdminActuarialPage'
 import AdminTriggersPage from './pages/AdminTriggersPage'
 import PolicyDocumentsPage from './pages/PolicyDocumentsPage'
 import SupportPage from './pages/SupportPage'
+import HowItWorksPage from './pages/HowItWorksPage'
 
 function Guard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -80,6 +81,14 @@ export default function App() {
             element={
               <Guard>
                 <SupportPage />
+              </Guard>
+            }
+          />
+          <Route
+            path="/how-it-works"
+            element={
+              <Guard>
+                <HowItWorksPage />
               </Guard>
             }
           />

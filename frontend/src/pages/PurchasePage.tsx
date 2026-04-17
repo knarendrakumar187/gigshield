@@ -28,7 +28,7 @@ export default function PurchasePage() {
   const [upi, setUpi] = useState(user?.upi_id || '')
   const [busy, setBusy] = useState(false)
   const [payErr, setPayErr] = useState('')
-  const [selectedTriggers, setSelectedTriggers] = useState<string[]>(['ALL'])
+  const [selectedTriggers, setSelectedTriggers] = useState<string[]>([])
 
   const AVAILABLE_TRIGGERS = [
     { id: 'RAIN', label: 'Heavy Rainfall', icon: '🌧️', desc: 'Severe waterlogging' },
@@ -41,19 +41,11 @@ export default function PurchasePage() {
 
   const toggleTrigger = (id: string) => {
     let newTriggers = [...selectedTriggers]
-    if (newTriggers.includes('ALL')) {
-      newTriggers = AVAILABLE_TRIGGERS.map(t => t.id).filter(t => t !== id)
+    if (newTriggers.includes(id)) {
+      newTriggers = newTriggers.filter(t => t !== id)
     } else {
-      if (newTriggers.includes(id)) {
-        newTriggers = newTriggers.filter(t => t !== id)
-      } else {
-        newTriggers.push(id)
-      }
-      if (newTriggers.length === AVAILABLE_TRIGGERS.length) {
-        newTriggers = ['ALL']
-      }
+      newTriggers.push(id)
     }
-    if (newTriggers.length === 0) newTriggers = ['RAIN']
     setSelectedTriggers(newTriggers)
   }
 
@@ -208,7 +200,7 @@ export default function PurchasePage() {
               )
             })}
           </div>
-          <Button className="w-full mt-2" onClick={() => setStep(2)}>
+          <Button className="w-full mt-2" onClick={() => setStep(2)} disabled={selectedTriggers.length === 0}>
             Continue
           </Button>
         </div>
