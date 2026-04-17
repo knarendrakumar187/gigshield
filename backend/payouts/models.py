@@ -22,3 +22,6 @@ class Payout(models.Model):
     completed_at = models.DateTimeField(null=True, blank=True)
     failure_reason = models.CharField(max_length=255, null=True, blank=True)
     receipt_url = models.CharField(max_length=500, blank=True, default="")
+
+    class Meta:
+        ordering = ["-initiated_at"]
