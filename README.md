@@ -212,4 +212,4 @@ Frontend dev server: **http://localhost:5173**
 
 ---
 
-*Developed for Guidewire DEVTrails 2026 · Team GigShield*
+*Developed for Guidewire DEVTrails 2026 · Team Core Five*
